@@ -1,0 +1,59 @@
+name: Build and Release TGClonerX Windows App
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Release Tag Name (e.g. v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build Executable with PyInstaller
+        run: |
+          python build_exe.py
+
+      - name: Set Release Tag Environment Variable
+        run: |
+          $tag = "${{ github.event.inputs.tag_name || (startsWith(github.ref, 'refs/tags/') && github.ref_name || 'v1.0.0') }}"
+          echo "TAG_NAME=$tag" >> $env:GITHUB_ENV
+
+      - name: Create Zip Archive
+        run: |
+          powershell Compress-Archive -Path dist/TGClonerX/* -DestinationPath "tgclonerx-${env:TAG_NAME}-windows.zip"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.TAG_NAME }}
+          name: TGClonerX Release ${{ env.TAG_NAME }}
+          files: tgclonerx-${{ env.TAG_NAME }}-windows.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
