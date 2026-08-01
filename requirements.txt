@@ -1,0 +1,5 @@
+telethon
+flask
+colorama
+pywebview
+pyinstaller

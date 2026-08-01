@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TGClonerX</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Native Desktop Toolbar / Titlebar -->
+        <header class="titlebar drag-area">
+            <div class="titlebar-left">
+                <span class="app-brand-logo">TGClonerX</span>
+                <span class="version-pill">version-v1.0.0</span>
+                <span class="status-pill running" id="live-status-pill">
+                    <span class="status-dot"></span> <span id="live-status-text">Ready</span>
+                </span>
+            </div>
+            
+            <div class="titlebar-right no-drag">
+                <button type="button" class="win-icon-btn" id="btn-win-github" title="GitHub Repository">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                </button>
+                <button type="button" class="win-control-btn" id="btn-win-min" title="Minimize">—</button>
+                <button type="button" class="win-control-btn" id="btn-win-max" title="Maximize">▢</button>
+                <button type="button" class="win-control-btn win-close" id="btn-win-close" title="Close">✕</button>
+            </div>
+        </header>
+
+        <!-- Main Body -->
+        <div class="app-body">
+            <!-- Left Sidebar Navigation -->
+            <aside class="sidebar no-drag">
+                <nav class="sidebar-nav">
+                    <button type="button" class="nav-item active" data-tab="tab-clone">
+                        <span class="nav-icon">📢</span> Clone
+                    </button>
+                    <button type="button" class="nav-item" data-tab="tab-accounts-api">
+                        <span class="nav-icon">👤</span> Accounts & API
+                    </button>
+                    <button type="button" class="nav-item" data-tab="tab-settings">
+                        <span class="nav-icon">⚙️</span> Settings
+                    </button>
+                </nav>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="main-content no-drag">
+                <!-- TAB 1: CLONE -->
+                <section id="tab-clone" class="tab-view active">
+                    <div class="view-title-bar">
+                        <div>
+                            <h1 class="view-heading">Telegram Clone Workspace</h1>
+                            <p class="view-subheading">Replicate channel posts, media, forum topics, and link replacements in real-time.</p>
+                        </div>
+                        <div class="view-header-actions">
+                            <button id="btn-refresh-chats" class="btn btn-refresh-action" disabled>🔄 Refresh</button>
+                            <button id="btn-stop-clone" class="btn btn-stop-action" disabled>🛑 Stop</button>
+                            <button id="btn-start-clone" class="btn btn-start-launch" disabled>🚀 Start Clone</button>
+                        </div>
+                    </div>
+
+                    <div class="content-grid">
+                        <!-- Channel Selection, Word Filters & Message Content Types -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>Channel Selection & Cloning Filters</h2>
+                                <span class="status-badge idle" id="clone-status-badge">Pending</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="selectors-row">
+                                    <div class="form-group">
+                                        <label for="source-chat">Source Channel / Group</label>
+                                        <select id="source-chat" disabled>
+                                            <option value="">Waiting for connection...</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="dest-chat">Destination Channel / Group</label>
+                                        <select id="dest-chat" disabled>
+                                            <option value="">Waiting for connection...</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="margin-top: 6px;">
+                                    <label for="blocked-words" style="font-size: 0.76rem;">🚫 Blocked Words Filter (Comma Separated)</label>
+                                    <div class="input-with-icon">
+                                        <span class="input-icon">🔍</span>
+                                        <input type="text" id="blocked-words" placeholder="e.g. promo, ads, click here" style="padding-left: 30px; height: 32px; font-size: 0.78rem;">
+                                    </div>
+                                </div>
+
+                                <div class="toggle-pill-row">
+                                    <label class="toggle-pill">
+                                        <input type="checkbox" id="clone-text" checked class="pill-checkbox">
+                                        <span class="pill-dot"></span>
+                                        <span class="pill-icon">📝</span>
+                                        <span class="pill-label">Text Messages</span>
+                                    </label>
+
+                                    <label class="toggle-pill">
+                                        <input type="checkbox" id="clone-media" checked class="pill-checkbox">
+                                        <span class="pill-dot"></span>
+                                        <span class="pill-icon">🖼️</span>
+                                        <span class="pill-label">Media Files</span>
+                                    </label>
+
+                                    <label class="toggle-pill">
+                                        <input type="checkbox" id="auto-map-topics" checked class="pill-checkbox">
+                                        <span class="pill-dot"></span>
+                                        <span class="pill-icon">📌</span>
+                                        <span class="pill-label">Forum Topics</span>
+                                    </label>
+
+                                    <label class="toggle-pill">
+                                        <input type="checkbox" id="auto-map-mentions" checked class="pill-checkbox">
+                                        <span class="pill-dot"></span>
+                                        <span class="pill-icon">🏷️</span>
+                                        <span class="pill-label">Mentions (@)</span>
+                                    </label>
+
+                                    <label class="toggle-pill">
+                                        <input type="checkbox" id="skip-links" class="pill-checkbox">
+                                        <span class="pill-dot"></span>
+                                        <span class="pill-icon">🔗</span>
+                                        <span class="pill-label">Skip Links</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Progress Bar & Quick Stats -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h2>Execution Progress</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="progress-info">
+                                    <span>Cloned Messages: <strong id="progress-counter">0</strong></span>
+                                    <span id="current-action">Ready</span>
+                                </div>
+                                <div class="progress-bar-wrapper">
+                                    <div class="progress-bar-fill" id="progress-bar"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tracked Links & Mentions Table Card -->
+                    <div class="card" style="margin-top: 12px;">
+                        <div class="card-header" style="flex-wrap: wrap; gap: 8px;">
+                            <h2>🔗 Link Tracker & Replacement Rules</h2>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <button type="button" id="btn-add-link-rule" class="btn secondary" style="height: 28px; padding: 0 10px; font-size: 0.72rem;">➕ Add Rule</button>
+                                <button type="button" id="btn-save-links" class="btn primary" style="height: 28px; padding: 0 12px; font-size: 0.72rem;" title="Save current link replacements and actions">💾 Save Link Settings</button>
+                                <button type="button" id="btn-scan-links" class="btn secondary" style="height: 28px; padding: 0 12px; font-size: 0.72rem;">🔎 Scan Links</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="tracked-links-container" style="display: block; max-height: 220px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 6px; background: rgba(4, 6, 10, 0.95); padding: 6px;">
+                                <table style="width: 100%; border-collapse: collapse; font-size: 0.76rem; color: #ddd;">
+                                    <thead>
+                                        <tr style="border-bottom: 1px solid var(--border-color); text-align: left;">
+                                            <th style="padding: 6px; width: 28%;">Original / Preview</th>
+                                            <th style="padding: 6px; width: 26%;">Link Text (Edit)</th>
+                                            <th style="padding: 6px; width: 26%;">Target URL (Edit)</th>
+                                            <th style="padding: 6px; width: 14%;">Action</th>
+                                            <th style="padding: 6px; width: 6%; text-align: center;">Count</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tracked-links-body">
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="no-links-placeholder" style="display: none; padding: 14px; text-align: center; color: var(--text-muted); font-size: 0.76rem;">
+                                Click <strong>➕ Add Rule</strong> to create custom link replacements or <strong>🔎 Scan Links</strong> to detect channel links.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 2: ACCOUNTS & API -->
+                <section id="tab-accounts-api" class="tab-view">
+                    <div class="view-title-bar">
+                        <div>
+                            <h1 class="view-heading">Accounts & API Settings</h1>
+                            <p class="view-subheading">Interactive setup: Save Telegram API credentials first, then connect your account session.</p>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Setup Wizard Stepper -->
+                    <div class="wizard-stepper-container">
+                        <div class="wizard-step-item active" id="wizard-step-1-indicator">
+                            <div class="wizard-step-icon">1</div>
+                            <div class="wizard-step-info">
+                                <div class="wizard-step-title">Step 1: API Credentials</div>
+                                <div class="wizard-step-desc">Save Telegram API ID & Hash</div>
+                            </div>
+                        </div>
+                        <div class="wizard-step-divider"></div>
+                        <div class="wizard-step-item" id="wizard-step-2-indicator">
+                            <div class="wizard-step-icon">2</div>
+                            <div class="wizard-step-info">
+                                <div class="wizard-step-title">Step 2: Connect Account</div>
+                                <div class="wizard-step-desc">Phone Auth & 2FA Login</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-grid">
+                        <!-- Step 1: Telegram API Credentials -->
+                        <div class="card" id="card-step-api">
+                            <div class="card-header">
+                                <h2>1️⃣ Step 1: Telegram API Credentials</h2>
+                                <span class="status-badge disconnected" id="api-status-badge">No API</span>
+                            </div>
+                            <div class="card-body">
+                                <form id="config-form" class="inline-form" style="flex-direction: column; align-items: stretch; gap: 8px;">
+                                    <div class="form-group">
+                                        <label for="api-id">API ID</label>
+                                        <input type="number" id="api-id" placeholder="Enter Telegram API ID (my.telegram.org)" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="api-hash">API HASH</label>
+                                        <input type="text" id="api-hash" placeholder="Enter Telegram API HASH" required>
+                                    </div>
+                                    <div style="display: flex; justify-content: flex-end; margin-top: 4px;">
+                                        <button type="submit" class="btn primary">Save API Credentials</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Telegram User Account Authorization -->
+                        <div class="card locked-wizard-card" id="card-step-account">
+                            <div class="card-header">
+                                <h2>2️⃣ Step 2: Connect Telegram Account</h2>
+                                <span class="status-badge disconnected" id="auth-status-badge">Disconnected</span>
+                            </div>
+                            <div class="card-body">
+                                <div id="api-required-banner" class="wizard-banner-alert">
+                                    <span>⚠️ Complete <strong>Step 1</strong> above to unlock account login.</span>
+                                </div>
+                                <div id="auth-section">
+                                    <div id="step-phone" class="auth-step active">
+                                        <form id="phone-form" class="inline-form" style="flex-direction: column; align-items: stretch; gap: 8px;">
+                                            <div class="form-group">
+                                                <label for="country-code-select">Country Code (DDI)</label>
+                                                <select id="country-code-select">
+                                                    <option value="+55" selected>🇧🇷 Brasil (+55)</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="phone-number">Phone Number (DDD + Numero)</label>
+                                                <input type="text" id="phone-number" placeholder="11 99999-9999" required>
+                                            </div>
+                                            <div style="display: flex; justify-content: flex-end; margin-top: 4px;">
+                                                <button type="submit" class="btn primary">Send Code</button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div id="step-code" class="auth-step">
+                                        <form id="code-form" class="inline-form">
+                                            <div class="form-group">
+                                                <label for="verification-code">Verification Code</label>
+                                                <input type="text" id="verification-code" placeholder="Telegram code" required>
+                                            </div>
+                                            <div class="form-group button-group">
+                                                <label>&nbsp;</label>
+                                                <div class="btn-group">
+                                                    <button type="submit" class="btn primary">Sign In</button>
+                                                    <button type="button" class="btn secondary back-to-phone">Back</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div id="step-password" class="auth-step">
+                                        <form id="password-form" class="inline-form">
+                                            <div class="form-group">
+                                                <label for="2fa-password">2FA Password</label>
+                                                <input type="password" id="2fa-password" placeholder="Password" required>
+                                            </div>
+                                            <div class="form-group button-group">
+                                                <label>&nbsp;</label>
+                                                <button type="submit" class="btn primary">Confirm 2FA</button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div id="step-authorized" class="auth-step">
+                                        <div class="auth-success-row">
+                                            <span class="checkmark">✓</span>
+                                            <span class="authorized-label" id="authorized-phone-label">Authorized Account</span>
+                                            <button type="button" id="btn-logout" class="btn danger">Switch Account</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 3: SETTINGS -->
+                <section id="tab-settings" class="tab-view">
+                    <div class="view-title-bar">
+                        <div>
+                            <h1 class="view-heading">Settings</h1>
+                            <p class="view-subheading">Customize desktop theme appearance & color mode</p>
+                        </div>
+                    </div>
+
+                    <!-- Redesigned High-Impact Appearance & Theme Card -->
+                    <div class="card theme-settings-card">
+                        <div class="card-header">
+                            <h2>🎨 Appearance & Theme Palette</h2>
+                            <span class="status-badge connected" id="active-theme-pill">AMOLED Dark</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="theme-selection-grid">
+                                <label class="theme-card-option">
+                                    <input type="radio" name="app-theme" value="amoled" checked>
+                                    <div class="theme-card-body amoled-theme-box">
+                                        <div class="theme-box-header">
+                                            <div class="theme-swatch-row">
+                                                <span class="swatch-circle" style="background: #000000; border: 1px solid #333;"></span>
+                                                <span class="swatch-circle" style="background: #6366f1;"></span>
+                                                <span class="swatch-circle" style="background: #10b981;"></span>
+                                            </div>
+                                            <span class="theme-radio-indicator">✓ Active</span>
+                                        </div>
+                                        <h3 class="theme-box-title">🌑 AMOLED Pure Black</h3>
+                                        <p class="theme-box-desc">Deep obsidian black palette designed for OLED screens and dark rooms</p>
+                                    </div>
+                                </label>
+
+                                <label class="theme-card-option">
+                                    <input type="radio" name="app-theme" value="light">
+                                    <div class="theme-card-body light-theme-box">
+                                        <div class="theme-box-header">
+                                            <div class="theme-swatch-row">
+                                                <span class="swatch-circle" style="background: #ffffff; border: 1px solid #ccc;"></span>
+                                                <span class="swatch-circle" style="background: #4f46e5;"></span>
+                                                <span class="swatch-circle" style="background: #0284c7;"></span>
+                                            </div>
+                                            <span class="theme-radio-indicator">Select</span>
+                                        </div>
+                                        <h3 class="theme-box-title">☀️ Light Clean White</h3>
+                                        <p class="theme-box-desc">Bright slate & crisp white palette optimized for daylight environments</p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <!-- Android-Style Mouse Draggable Bottom Sheet Console Drawer -->
+        <div id="floating-terminal-drawer" class="floating-terminal-drawer no-drag">
+            <!-- Android Drag Handle Bar (===) -->
+            <div class="drawer-drag-handle" id="drawer-drag-handle" title="Click & Drag up/down to adjust console height">
+                <span class="handle-bar"></span>
+            </div>
+
+            <div class="drawer-header">
+                <div class="drawer-header-left">
+                    <span class="drawer-title">📜 Live Console Output</span>
+                    <span class="drawer-badge">Active Log</span>
+                </div>
+                <div class="drawer-header-right">
+                    <button type="button" id="btn-clear-history" class="drawer-btn" title="Clear History DB">🗑️ Clear DB</button>
+                    <button type="button" id="btn-hide-drawer" class="drawer-btn danger-btn" title="Collapse to Android Floating Bubble">🔻 Collapse</button>
+                </div>
+            </div>
+            <div class="terminal-wrapper">
+                <div class="terminal-body" id="terminal-logs">
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Android-Style Bubble Widget (Visible when drawer is collapsed) -->
+        <div id="android-floating-bubble" class="android-floating-bubble no-drag" style="display: none;" title="Drag or click to open Live Console Output">
+            <span class="bubble-icon">📜</span>
+            <span class="bubble-label">Console</span>
+            <span class="bubble-pulse"></span>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

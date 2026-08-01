@@ -1,0 +1,30 @@
+# PyInstaller build outputs and internal runtime
+_internal/
+build/
+dist/
+*.exe
+*.spec
+
+# Python cache & virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+ENV/
+env/
+
+# Telethon session and user runtime data
+*.session
+*.session-journal
+config.txt
+*.db
+*.db-journal
+filters.json
+tracked_links.json
+settings.json
+last_session.json
+*.log
+crash_log.txt
