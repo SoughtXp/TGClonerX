@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             checkCloningRunning();
         } catch (err) {
-            addTerminalLine('Failed to connect to TGClonerX backend server.', 'error-line');
+            addTerminalLine(`Failed to connect to TGClonerX backend server: ${err.message}`, 'error-line');
         }
     }
 

@@ -104,6 +104,27 @@ def run_async(coro, timeout=20):
 FILTERS_FILE = "filters.json"
 TRACKED_LINKS_FILE = "tracked_links.json"
 
+def load_settings():
+    """Loads saved settings from settings.json."""
+    if os.path.exists(SETTINGS_FILE):
+        try:
+            with open(SETTINGS_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return {
+        "language": "en",
+        "theme": "dark"
+    }
+
+def save_settings(settings):
+    """Saves settings to settings.json."""
+    try:
+        with open(SETTINGS_FILE, "w", encoding="utf-8") as f:
+            json.dump(settings, f, indent=2, ensure_ascii=False)
+    except Exception as e:
+        print(f"Error saving settings: {e}")
+
 def load_filters():
     """Loads saved filter settings from filters.json."""
     if os.path.exists(FILTERS_FILE):
@@ -234,7 +255,7 @@ def save_config():
 
         client = get_client()
         if client.is_connected():
-            run_async(client.disconnect())
+            client.disconnect()
         run_async(client.connect())
 
         broadcast("log", "Telegram API credentials saved successfully.")
