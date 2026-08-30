@@ -22,7 +22,9 @@
 
 <div align="center">
 
-<p>Real-time Telegram channel and topic cloner.</p>
+<p>
+<img src="https://img.shields.io/badge/Real--time%20Telegram%20channel%20and%20topic%20cloner-2d2d2d?style=flat-square">
+</p>
 
 </div>
 
@@ -80,10 +82,10 @@
 
 <br>
 
-<div align="left">
+<div align="center">
 
 <a href="https://github.com/SoughtXp/TGClonerX/releases">
-  <img src="https://img.shields.io/badge/⬇_Get%20the%20latest%20executable-2ea44f?style=for-the-badge&logo=windows&logoColor=white">
+  <img src="https://img.shields.io/badge/⬇_Get%20the%20latest%20executable-26A5E4?style=for-the-badge&logo=windows&logoColor=white">
 </a>
 
 </div>
